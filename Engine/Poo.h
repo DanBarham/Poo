@@ -6,11 +6,11 @@
 class Poo
 {
 public:
+	Poo( const int _x,const int _y,const int _vx,const int _vy );
 	void Update();
 	void TestCollision( const Dude& dude );
 	void Draw( Graphics& gfx ) const;
 	bool IsEaten() const;
-	void Init( const int _x,const int _y,const int _vx,const int _vy );
 	void Reset(int _x, int _y, int _vx, int _vy);
 private:
 	int x;		//x postion

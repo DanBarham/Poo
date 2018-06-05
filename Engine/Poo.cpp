@@ -1,9 +1,16 @@
 #include "Poo.h"
-#include <assert.h>
+
+Poo::Poo( const int _x,const int _y,const int _vx,const int _vy )
+	:
+	x( _x ),
+	y( _y ),
+	vx( _vx ),
+	vy( _vy )
+{
+}
 
 void Poo::Update()
 {
-	assert(init);
 	x += vx;
 	y += vy;
 
@@ -34,7 +41,6 @@ void Poo::Update()
 
 void Poo::TestCollision( const Dude& dude )
 {
-	assert(init);
 	const int duderight = dude.GetX() + dude.GetWidth();
 	const int dudebottom = dude.GetY() + dude.GetHeight();
 	const int pooright = x + width;
@@ -60,7 +66,6 @@ void Poo::Reset(int _x, int _y, int _vx, int _vy)
 
 void Poo::Draw( Graphics& gfx ) const
 {
-	assert(init);
 	gfx.PutPixel( 14 + x,0 + y,138,77,0 );
 	gfx.PutPixel( 7 + x,1 + y,138,77,0 );
 	gfx.PutPixel( 13 + x,1 + y,138,77,0 );
@@ -296,16 +301,5 @@ void Poo::Draw( Graphics& gfx ) const
 
 bool Poo::IsEaten() const
 {
-	assert(init);
 	return isEaten;
-}
-
-void Poo::Init( const int _x,const int _y,const int _vx,const int _vy )
-{
-	assert(!init);
-	init = true;
-	x = _x;
-	y = _y;
-	vx = _vx;
-	vy = _vy;
 }

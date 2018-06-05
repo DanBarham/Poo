@@ -28,6 +28,7 @@
 #include "Dude.h"
 #include "Pellet.h"
 #include "ScoreBoard.h"
+#include <vector>
 
 class Game
 {
@@ -54,10 +55,9 @@ private:
 	std::uniform_int_distribution<int> xDist;
 	std::uniform_int_distribution<int> yDist;
 	std::uniform_int_distribution<int> pooVDist;
-	static constexpr int numPoo = 20;
 	static constexpr int maxScore = 300;
 	Dude dude;
-	Poo poo[numPoo];
+	std::vector<Poo> poo;
 	Pellet pellet;
 	ScoreBoard sb;
 	int score = 0;

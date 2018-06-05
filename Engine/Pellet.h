@@ -19,7 +19,7 @@ private:
 	int redShift = 255;
 	bool redDown = true;
 	static constexpr int redShiftSpeed = 3;
-	static constexpr int size = 30;		//These are the dimensions of the sprite itself
+	static constexpr int size = 25;		//These are the dimensions of the sprite itself
 	bool isEaten = false;
 	bool init = false;
 };

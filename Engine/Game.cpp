@@ -26,10 +26,12 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	rng(rd()),
-	xDist(0, 770),
-	yDist(0, 570),
-	pooVDist(0, 1)
+	xDist( 0,770 ),
+	yDist( 0,570 ),
+	pooVDist( 0,1 )
 {
+	const int numPoo = 20;
+	poo.reserve( numPoo );
 	//Initializing our pellet + poos, otherwise you'll get an assert fail of !init
 	pellet.Init( xDist(rng),yDist(rng) );
 	for (int i = 0; i < numPoo; ++i)
@@ -41,7 +43,7 @@ Game::Game( MainWindow& wnd )
 			vx -= 1;
 		if (vy == 0)
 			vy -= 1;
-		poo[i].Init( xDist(rng),yDist(rng),vx,vy );
+		poo.emplace_back( xDist(rng),yDist(rng),vx,vy );
 	}	
 }
 
@@ -60,16 +62,16 @@ void Game::UpdateModel()
 		dude.Update( wnd.kbd );
 		dude.ClampToScreen();
 
-		if (pellet.IsEaten())
+		if ( pellet.IsEaten() )
 		{
-			if(score < maxScore)
+			if( score < maxScore )
 				++score;
-			pellet.Respawn(xDist(rng), yDist(rng));
+			pellet.Respawn( xDist( rng ), yDist( rng ) );
 		}
 
 		pellet.ProcessConsumption( dude );
 
-		for (int i = 0; i < numPoo; ++i)
+		for (int i = 0; i < poo.size(); ++i)
 		{
 			poo[i].Update();
 			poo[i].TestCollision( dude );
@@ -83,19 +85,19 @@ void Game::UpdateModel()
 		}
 	}
 
-	if (wnd.kbd.KeyIsPressed(VK_RETURN) && gameOver)
+	if ( wnd.kbd.KeyIsPressed( VK_RETURN ) && gameOver )
 	{
 		dude.Reset();
-		for (int i = 0; i < numPoo; ++i)
+		for (int i = 0; i < poo.size(); ++i)
 		{
 			int vx = pooVDist(rng);
 			int vy = pooVDist(rng);
 
-			if (vx == 0)
-				vx -= 1;
-			if (vy == 0)
-				vy -= 1;
-			poo[i].Reset(xDist(rng), yDist(rng), vx, vy);
+			if ( vx == 0 )
+				--vx;
+			if ( vy == 0 )
+				--vy;
+			poo[i].Reset( xDist(rng),yDist(rng),vx,vy );
 		}
 		score = 0;
 		gameOver = false;
@@ -105,7 +107,7 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	if( !isStarted && !gameOver)
+	if( !isStarted && !gameOver )
 	{
 		DrawTitleScreen( 325,211 );
 	}
@@ -113,7 +115,7 @@ void Game::ComposeFrame()
 	{
 		sb.Draw(score, gfx);
 		//Draw da poos
-		for( int i = 0; i < numPoo; ++i )
+		for( int i = 0; i < poo.size(); ++i )
 		{
 			poo[i].Draw( gfx );
 			if ( poo[i].IsEaten() )
@@ -127,8 +129,8 @@ void Game::ComposeFrame()
 		pellet.Draw( gfx );
 
 		//wompwomp
-		if(gameOver)
-			DrawGameOver(358, 268);
+		if( gameOver )
+			DrawGameOver( 358,268 );
 	}
 }
 
