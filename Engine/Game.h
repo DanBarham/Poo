@@ -32,6 +32,13 @@
 
 class Game
 {
+private:
+	enum class GameState
+	{
+		TitleScreen,
+		Playing,
+		GameOver
+	};
 public:
 	Game( class MainWindow& wnd );
 	Game( const Game& ) = delete;
@@ -50,18 +57,17 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	static constexpr int maxScore = 300;
 	std::random_device rd;
 	std::mt19937 rng;
 	std::uniform_int_distribution<int> xDist;
 	std::uniform_int_distribution<int> yDist;
 	std::uniform_int_distribution<int> pooVDist;
-	static constexpr int maxScore = 300;
-	Dude dude;
 	std::vector<Poo> poo;
+	Dude dude;
 	Pellet pellet;
 	ScoreBoard sb;
-	int score = 0;
-	bool isStarted = false;
-	bool gameOver = false;
+	GameState gState;
+	int score;
 	/********************************/
 };

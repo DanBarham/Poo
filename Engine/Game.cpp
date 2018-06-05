@@ -28,22 +28,27 @@ Game::Game( MainWindow& wnd )
 	rng(rd()),
 	xDist( 0,770 ),
 	yDist( 0,570 ),
-	pooVDist( 0,1 )
+	pooVDist( 0,1 ),
+	gState( GameState::TitleScreen ),
+	score( 0 )
 {
 	const int numPoo = 20;
 	poo.reserve( numPoo );
-	//Initializing our pellet + poos, otherwise you'll get an assert fail of !init
-	pellet.Init( xDist(rng),yDist(rng) );
-	for (int i = 0; i < numPoo; ++i)
+	pellet.Init( xDist( rng ),yDist( rng ) );
+	for( int i = 0; i < numPoo; ++i )
 	{
 		int vx = pooVDist(rng);
 		int vy = pooVDist(rng);
 
-		if (vx == 0)
+		if( vx == 0 )
+		{
 			vx -= 1;
-		if (vy == 0)
+		}
+		if( vy == 0 )
+		{
 			vy -= 1;
-		poo.emplace_back( xDist(rng),yDist(rng),vx,vy );
+		}
+		poo.emplace_back( xDist( rng ),yDist( rng ),vx,vy );
 	}	
 }
 
@@ -57,7 +62,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if( isStarted && !gameOver )
+	if( gState == GameState::Playing )
 	{
 		dude.Update( wnd.kbd );
 		dude.ClampToScreen();
@@ -65,49 +70,58 @@ void Game::UpdateModel()
 		if ( pellet.IsEaten() )
 		{
 			if( score < maxScore )
+			{
 				++score;
+			}
 			pellet.Respawn( xDist( rng ), yDist( rng ) );
 		}
 
 		pellet.ProcessConsumption( dude );
 
-		for (int i = 0; i < poo.size(); ++i)
+		for( Poo& p : poo )
 		{
-			poo[i].Update();
-			poo[i].TestCollision( dude );
+			p.Update();
+			p.TestCollision( dude );
+			if( p.IsEaten() )
+			{
+				gState = GameState::GameOver;
+			}
 		}
 	}
 	else
 	{
 		if( wnd.kbd.KeyIsPressed( VK_RETURN ) )
 		{
-			isStarted = true;
+			gState = GameState::Playing;
 		}
 	}
 
-	if ( wnd.kbd.KeyIsPressed( VK_RETURN ) && gameOver )
+	if ( wnd.kbd.KeyIsPressed( VK_RETURN ) && gState == GameState::GameOver )
 	{
 		dude.Reset();
-		for (int i = 0; i < poo.size(); ++i)
+		for( size_t i = 0; i < poo.size(); ++i )
 		{
-			int vx = pooVDist(rng);
-			int vy = pooVDist(rng);
+			int vx = pooVDist( rng );
+			int vy = pooVDist( rng );
 
-			if ( vx == 0 )
+			if( vx == 0 )
+			{
 				--vx;
-			if ( vy == 0 )
+			}
+			if( vy == 0 )
+			{
 				--vy;
+			}
 			poo[i].Reset( xDist(rng),yDist(rng),vx,vy );
 		}
 		score = 0;
-		gameOver = false;
-		isStarted = false;
+		gState = GameState::TitleScreen;
 	}
 }
 
 void Game::ComposeFrame()
 {
-	if( !isStarted && !gameOver )
+	if( gState == GameState::TitleScreen )
 	{
 		DrawTitleScreen( 325,211 );
 	}
@@ -115,22 +129,20 @@ void Game::ComposeFrame()
 	{
 		sb.Draw(score, gfx);
 		//Draw da poos
-		for( int i = 0; i < poo.size(); ++i )
+		for( const Poo& p : poo )
 		{
-			poo[i].Draw( gfx );
-			if ( poo[i].IsEaten() )
-			{
-				gameOver = true;
-			}
+			p.Draw(gfx);
 		}
 
 		//Draw da dude
-		dude.Draw( gfx );
-		pellet.Draw( gfx );
+		dude.Draw(gfx);
+		pellet.Draw(gfx);
 
 		//wompwomp
-		if( gameOver )
+		if ( gState == GameState::GameOver )
+		{
 			DrawGameOver( 358,268 );
+		}
 	}
 }
 
