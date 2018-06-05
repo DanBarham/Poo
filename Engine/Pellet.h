@@ -6,11 +6,11 @@
 class Pellet
 {
 public:
+	Pellet( const int _x,const int _y );
 	void ProcessConsumption( const Dude& dude );
 	void Draw( Graphics& gfx );
 	bool IsEaten() const;
 	void Respawn( const int _x,const int _y );
-	void Init( const int _x,const int _y );
 private:
 	void ClampToScreen();
 private:

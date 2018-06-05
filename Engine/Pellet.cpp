@@ -1,10 +1,15 @@
 #include "Pellet.h"
 #include "Colors.h"
-#include <assert.h>
+
+Pellet::Pellet( const int _x,const int _y )
+	:
+	x( _x ),
+	y( _y )
+{
+}
 
 void Pellet::ProcessConsumption(const Dude& dude)
 {
-	assert(init);
 	const int dudeRight = dude.GetX() + dude.GetWidth();
 	const int dudeBottom = dude.GetY() + dude.GetHeight();
 	const int pelletRight = x + size;
@@ -21,7 +26,6 @@ void Pellet::ProcessConsumption(const Dude& dude)
 
 void Pellet::Draw( Graphics& gfx )
 {
-	assert(init);
 	for (int i = 0; i < size; ++i)
 	{
 		for (int j = 0; j < size; ++j)
@@ -52,13 +56,11 @@ void Pellet::Draw( Graphics& gfx )
 
 bool Pellet::IsEaten() const
 {
-	assert(init);
 	return isEaten;
 }
 
 void Pellet::Respawn( const int _x,const int _y )
 {
-	assert(init);
 	x = _x;
 	y = _y;
 	ClampToScreen();
@@ -67,7 +69,6 @@ void Pellet::Respawn( const int _x,const int _y )
 
 void Pellet::ClampToScreen()
 {
-	assert(init);
 	const int right = x + size;
 	if (x < 0)
 	{
@@ -87,11 +88,4 @@ void Pellet::ClampToScreen()
 	{
 		y = (Graphics::ScreenHeight - 1) - size;
 	}
-}
-
-void Pellet::Init( const int _x,const int _y )
-{
-	assert(!init);
-	init = true;
-	Respawn( _x,_y );	
 }

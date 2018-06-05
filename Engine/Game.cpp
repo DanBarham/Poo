@@ -29,12 +29,12 @@ Game::Game( MainWindow& wnd )
 	xDist( 0,770 ),
 	yDist( 0,570 ),
 	pooVDist( 0,1 ),
+	pellet( xDist( rng ),yDist( rng ) ),
 	gState( GameState::TitleScreen ),
 	score( 0 )
 {
 	const int numPoo = 20;
-	poo.reserve( numPoo );
-	pellet.Init( xDist( rng ),yDist( rng ) );
+	poo.reserve( numPoo );	
 	for( int i = 0; i < numPoo; ++i )
 	{
 		int vx = pooVDist(rng);
