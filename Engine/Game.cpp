@@ -62,8 +62,23 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if( gState == GameState::Playing )
+	switch( gState )
 	{
+	case GameState::TitleScreen:
+		while( !wnd.kbd.KeyIsEmpty() )
+		{
+			auto e = wnd.kbd.ReadKey();
+
+			if( e.IsRelease() )
+			{
+				if( e.GetCode() == VK_RETURN )
+				{
+					gState = GameState::Playing;
+				}
+			}
+		}
+		break;
+	case GameState::Playing:
 		dude.Update( wnd.kbd );
 		dude.ClampToScreen();
 
@@ -87,35 +102,22 @@ void Game::UpdateModel()
 				gState = GameState::GameOver;
 			}
 		}
-	}
-	else
-	{
-		if( wnd.kbd.KeyIsPressed( VK_RETURN ) )
+		break;
+	case GameState::GameOver:
+		while( !wnd.kbd.KeyIsEmpty() )
 		{
-			gState = GameState::Playing;
-		}
-	}
+			auto e = wnd.kbd.ReadKey();
 
-	if ( wnd.kbd.KeyIsPressed( VK_RETURN ) && gState == GameState::GameOver )
-	{
-		dude.Reset();
-		for( size_t i = 0; i < poo.size(); ++i )
-		{
-			int vx = pooVDist( rng );
-			int vy = pooVDist( rng );
-
-			if( vx == 0 )
+			if( e.IsRelease() )
 			{
-				--vx;
+				if( e.GetCode() == VK_RETURN )
+				{
+					gState = GameState::TitleScreen;
+					ResetGameAssets();
+				}
 			}
-			if( vy == 0 )
-			{
-				--vy;
-			}
-			poo[i].Reset( xDist(rng),yDist(rng),vx,vy );
 		}
-		score = 0;
-		gState = GameState::TitleScreen;
+		break;
 	}
 }
 
@@ -144,6 +146,28 @@ void Game::ComposeFrame()
 			DrawGameOver( 358,268 );
 		}
 	}
+}
+
+void Game::ResetGameAssets()
+{
+	dude.Reset();
+		for( size_t i = 0; i < poo.size(); ++i )
+		{
+			int vx = pooVDist( rng );
+			int vy = pooVDist( rng );
+
+			if( vx == 0 )
+			{
+				--vx;
+			}
+			if( vy == 0 )
+			{
+				--vy;
+			}
+			poo[i].Reset( xDist(rng),yDist(rng),vx,vy );
+		}
+		score = 0;
+		gState = GameState::TitleScreen;
 }
 
 void Game::DrawTitleScreen(int x, int y)
