@@ -25,29 +25,27 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	rng(rd()),
-	xDist( 0,770 ),
-	yDist( 0,570 ),
-	pooVDist( 0,1 ),
+	rng( rd() ),
+	xDist( 0.0f,770.0f ),
+	yDist( 0.0f,570.0f ),
+	pooVDist( -1.5f,1.5f ),
 	pellet( xDist( rng ),yDist( rng ) ),
 	gState( GameState::TitleScreen ),
 	score( 0 )
 {
 	const int numPoo = 20;
-	poo.reserve( numPoo );	
+	poo.reserve( numPoo );
+
 	for( int i = 0; i < numPoo; ++i )
 	{
-		int vx = pooVDist(rng);
-		int vy = pooVDist(rng);
+		float vx;
+		float vy;
+		do
+		{
+			vx = pooVDist( rng );
+			vy = pooVDist( rng );
+		} while ( abs( vx ) < 0.5f || abs( vy ) < 0.5f );
 
-		if( vx == 0 )
-		{
-			vx -= 1;
-		}
-		if( vy == 0 )
-		{
-			vy -= 1;
-		}
 		poo.emplace_back( xDist( rng ),yDist( rng ),vx,vy );
 	}	
 }
@@ -151,23 +149,20 @@ void Game::ComposeFrame()
 void Game::ResetGameAssets()
 {
 	dude.Reset();
-		for( size_t i = 0; i < poo.size(); ++i )
+	for( Poo& p : poo )
+	{
+		float vx;
+		float vy;
+		do
 		{
-			int vx = pooVDist( rng );
-			int vy = pooVDist( rng );
+			vx = pooVDist( rng );
+			vy = pooVDist( rng );
+		} while ( abs( vx ) < 0.5f || abs( vy ) < 0.5f );
 
-			if( vx == 0 )
-			{
-				--vx;
-			}
-			if( vy == 0 )
-			{
-				--vy;
-			}
-			poo[i].Reset( xDist(rng),yDist(rng),vx,vy );
-		}
-		score = 0;
-		gState = GameState::TitleScreen;
+		p.Reset( xDist( rng ),yDist( rng ),vx,vy );
+	}
+	score = 0;
+	gState = GameState::TitleScreen;
 }
 
 void Game::DrawTitleScreen(int x, int y)

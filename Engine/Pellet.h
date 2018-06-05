@@ -6,16 +6,16 @@
 class Pellet
 {
 public:
-	Pellet( const int _x,const int _y );
+	Pellet( const float _x,const float _y );
 	void ProcessConsumption( const Dude& dude );
 	void Draw( Graphics& gfx );
 	bool IsEaten() const;
-	void Respawn( const int _x,const int _y );
+	void Respawn( const float _x,const float _y );
 private:
 	void ClampToScreen();
 private:
-	int x;		//x postion
-	int y;		//y position
+	float x;		//x postion
+	float y;		//y position
 	int redShift = 255;
 	bool redDown = true;
 	static constexpr int redShiftSpeed = 3;

@@ -61,9 +61,9 @@ private:
 	static constexpr int maxScore = 300;
 	std::random_device rd;
 	std::mt19937 rng;
-	std::uniform_int_distribution<int> xDist;
-	std::uniform_int_distribution<int> yDist;
-	std::uniform_int_distribution<int> pooVDist;
+	std::uniform_real_distribution<float> xDist;
+	std::uniform_real_distribution<float> yDist;
+	std::uniform_real_distribution<float> pooVDist;
 	std::vector<Poo> poo;
 	Dude dude;
 	Pellet pellet;

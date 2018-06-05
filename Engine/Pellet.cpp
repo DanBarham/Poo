@@ -1,7 +1,7 @@
 #include "Pellet.h"
 #include "Colors.h"
 
-Pellet::Pellet( const int _x,const int _y )
+Pellet::Pellet( const float _x,const float _y )
 	:
 	x( _x ),
 	y( _y )
@@ -10,15 +10,15 @@ Pellet::Pellet( const int _x,const int _y )
 
 void Pellet::ProcessConsumption(const Dude& dude)
 {
-	const int dudeRight = dude.GetX() + dude.GetWidth();
-	const int dudeBottom = dude.GetY() + dude.GetHeight();
-	const int pelletRight = x + size;
-	const int pelletBottom = y + size;
+	const float dudeRight = dude.GetX() + dude.GetWidth();
+	const float dudeBottom = dude.GetY() + dude.GetHeight();
+	const float pelletRight = x + size;
+	const float pelletBottom = y + size;
 
-	if (dudeRight >= x &&
+	if ( dudeRight >= x &&
 		dude.GetX() <= pelletRight &&
 		dudeBottom >= y &&
-		dude.GetY() <= pelletBottom)
+		dude.GetY() <= pelletBottom )
 	{
 		isEaten = true;
 	}
@@ -30,7 +30,7 @@ void Pellet::Draw( Graphics& gfx )
 	{
 		for (int j = 0; j < size; ++j)
 		{
-			gfx.PutPixel( i + x,j + y,255,redShift,redShift );
+			gfx.PutPixel( i + int( x ),j + int( y ),255,redShift,redShift );
 		}
 	}
 
@@ -59,7 +59,7 @@ bool Pellet::IsEaten() const
 	return isEaten;
 }
 
-void Pellet::Respawn( const int _x,const int _y )
+void Pellet::Respawn( const float _x,const float _y )
 {
 	x = _x;
 	y = _y;
@@ -69,23 +69,23 @@ void Pellet::Respawn( const int _x,const int _y )
 
 void Pellet::ClampToScreen()
 {
-	const int right = x + size;
-	if (x < 0)
+	const float right = x + size;
+	if ( x < 0.0f )
 	{
-		x = 0;
+		x = 0.0f;
 	}
-	else if (right >= Graphics::ScreenWidth)
+	else if ( right >= Graphics::ScreenWidth )
 	{
-		x = (Graphics::ScreenWidth - 1) - size;
+		x = ( Graphics::ScreenWidth - 1 ) - size;
 	}
 
-	const int bottom = y + size;
-	if (y < 0)
+	const float bottom = y + size;
+	if ( y < 0.0f )
 	{
-		y = 0;
+		y = 0.0f;
 	}
-	else if (bottom >= Graphics::ScreenHeight)
+	else if ( bottom >= Graphics::ScreenHeight)
 	{
-		y = (Graphics::ScreenHeight - 1) - size;
+		y = ( Graphics::ScreenHeight - 1 ) - size;
 	}
 }
