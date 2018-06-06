@@ -21,6 +21,7 @@
 #pragma once
 
 #include <random>
+#include <vector>
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
@@ -28,7 +29,7 @@
 #include "Dude.h"
 #include "Pellet.h"
 #include "ScoreBoard.h"
-#include <vector>
+#include "SoundEffect.h"
 
 class Game
 {
@@ -69,6 +70,9 @@ private:
 	Pellet pellet;
 	ScoreBoard sb;
 	GameState gState;
+	Sound pooSound;
+	Sound gameLoop;
+	Sound chime;
 	int score;
 	/********************************/
 };

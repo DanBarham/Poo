@@ -150,6 +150,8 @@
     <ClInclude Include="Poo.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScoreBoard.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dude.cpp" />
@@ -163,6 +165,7 @@
     <ClCompile Include="Pellet.cpp" />
     <ClCompile Include="Poo.cpp" />
     <ClCompile Include="ScoreBoard.cpp" />
+    <ClCompile Include="Sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">
@@ -231,6 +234,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Chili.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="Sound\chime.wav" />
+    <Media Include="Sound\fart.wav" />
+    <Media Include="Sound\loop.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -24,13 +24,16 @@
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
-	gfx( wnd ),
+	gfx( wnd ), 
 	rng( rd() ),
 	xDist( 0.0f,770.0f ),
 	yDist( 0.0f,570.0f ),
 	pooVDist( -1.5f,1.5f ),
 	pellet( xDist( rng ),yDist( rng ) ),
 	gState( GameState::TitleScreen ),
+	pooSound( L"Sound\\fart.wav" ),
+	gameLoop( L"Sound\\loop.wav",0.0f,13.60f ),
+	chime( L"Sound\\chime.wav" ),
 	score( 0 )
 {
 	const int numPoo = 20;
@@ -71,6 +74,7 @@ void Game::UpdateModel()
 			{
 				if( e.GetCode() == VK_RETURN )
 				{
+					gameLoop.Play();
 					gState = GameState::Playing;
 				}
 			}
@@ -87,6 +91,7 @@ void Game::UpdateModel()
 				++score;
 			}
 			pellet.Respawn( xDist( rng ), yDist( rng ) );
+			chime.Play();
 		}
 
 		pellet.ProcessConsumption( dude );
@@ -97,6 +102,8 @@ void Game::UpdateModel()
 			p.TestCollision( dude );
 			if( p.IsEaten() )
 			{
+				gameLoop.StopAll();
+				pooSound.Play();
 				gState = GameState::GameOver;
 			}
 		}
