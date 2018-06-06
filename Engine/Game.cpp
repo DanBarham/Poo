@@ -29,7 +29,7 @@ Game::Game( MainWindow& wnd )
 	xDist( 0.0f,770.0f ),
 	yDist( 0.0f,570.0f ),
 	pooVDist( -1.5f,1.5f ),
-	pellet( xDist( rng ),yDist( rng ) ),
+	pellet( Vec2( xDist( rng ),yDist( rng ) ) ),
 	gState( GameState::TitleScreen ),
 	pooSound( L"Sound\\fart.wav" ),
 	gameLoop( L"Sound\\loop.wav",0.0f,13.60f ),
@@ -41,15 +41,14 @@ Game::Game( MainWindow& wnd )
 
 	for( int i = 0; i < numPoo; ++i )
 	{
-		float vx;
-		float vy;
+		Vec2 vel;
 		do
 		{
-			vx = pooVDist( rng );
-			vy = pooVDist( rng );
-		} while ( abs( vx ) < 0.5f || abs( vy ) < 0.5f );
+			vel.x = pooVDist( rng );
+			vel.y = pooVDist( rng );
+		} while ( abs( vel.x ) < 0.5f || abs( vel.y ) < 0.5f );
 
-		poo.emplace_back( xDist( rng ),yDist( rng ),vx,vy );
+		poo.emplace_back( Vec2( xDist( rng ),yDist( rng ) ),vel );
 	}	
 }
 
@@ -90,7 +89,7 @@ void Game::UpdateModel()
 			{
 				++score;
 			}
-			pellet.Respawn( xDist( rng ), yDist( rng ) );
+			pellet.Respawn( Vec2( xDist( rng ), yDist( rng ) ) );
 			chime.Play();
 		}
 
@@ -158,15 +157,14 @@ void Game::ResetGameAssets()
 	dude.Reset();
 	for( Poo& p : poo )
 	{
-		float vx;
-		float vy;
+		Vec2 vel;
 		do
 		{
-			vx = pooVDist( rng );
-			vy = pooVDist( rng );
-		} while ( abs( vx ) < 0.5f || abs( vy ) < 0.5f );
+			vel.x = pooVDist( rng );
+			vel.y = pooVDist( rng );
+		} while ( abs( vel.x ) < 0.5f || abs( vel.y ) < 0.5f );
 
-		p.Reset( xDist( rng ),yDist( rng ),vx,vy );
+		p.Reset( Vec2( xDist( rng ),yDist( rng ) ),vel );
 	}
 	score = 0;
 	gState = GameState::TitleScreen;

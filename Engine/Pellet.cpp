@@ -1,10 +1,9 @@
 #include "Pellet.h"
 #include "Colors.h"
 
-Pellet::Pellet( const float _x,const float _y )
+Pellet::Pellet(const Vec2& _pos)
 	:
-	x( _x ),
-	y( _y )
+	pos( _pos )
 {
 }
 
@@ -12,12 +11,12 @@ void Pellet::ProcessConsumption(const Dude& dude)
 {
 	const float dudeRight = dude.GetX() + dude.GetWidth();
 	const float dudeBottom = dude.GetY() + dude.GetHeight();
-	const float pelletRight = x + size;
-	const float pelletBottom = y + size;
+	const float pelletRight = pos.x + size;
+	const float pelletBottom = pos.y + size;
 
-	if ( dudeRight >= x &&
+	if ( dudeRight >= pos.x &&
 		dude.GetX() <= pelletRight &&
-		dudeBottom >= y &&
+		dudeBottom >= pos.y &&
 		dude.GetY() <= pelletBottom )
 	{
 		isEaten = true;
@@ -30,7 +29,7 @@ void Pellet::Draw( Graphics& gfx )
 	{
 		for (int j = 0; j < size; ++j)
 		{
-			gfx.PutPixel( i + int( x ),j + int( y ),255,redShift,redShift );
+			gfx.PutPixel( i + int( pos.x ),j + int( pos.y ),255,redShift,redShift );
 		}
 	}
 
@@ -59,33 +58,32 @@ bool Pellet::IsEaten() const
 	return isEaten;
 }
 
-void Pellet::Respawn( const float _x,const float _y )
+void Pellet::Respawn( const Vec2& _pos )
 {
-	x = _x;
-	y = _y;
+	pos = _pos;
 	ClampToScreen();
 	isEaten = false;
 }
 
 void Pellet::ClampToScreen()
 {
-	const float right = x + size;
-	if ( x < 0.0f )
+	const float right = pos.x + size;
+	if ( pos.x < 0.0f )
 	{
-		x = 0.0f;
+		pos.x = 0.0f;
 	}
 	else if ( right >= Graphics::ScreenWidth )
 	{
-		x = ( Graphics::ScreenWidth - 1 ) - size;
+		pos.x = ( Graphics::ScreenWidth - 1 ) - size;
 	}
 
-	const float bottom = y + size;
-	if ( y < 0.0f )
+	const float bottom = pos.y + size;
+	if ( pos.y < 0.0f )
 	{
-		y = 0.0f;
+		pos.y = 0.0f;
 	}
 	else if ( bottom >= Graphics::ScreenHeight)
 	{
-		y = ( Graphics::ScreenHeight - 1 ) - size;
+		pos.y = ( Graphics::ScreenHeight - 1 ) - size;
 	}
 }
