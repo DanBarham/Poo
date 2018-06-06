@@ -41,6 +41,7 @@ private:
 		GameOver
 	};
 public:
+	~Game();
 	Game( class MainWindow& wnd );
 	Game( const Game& ) = delete;
 	Game& operator=( const Game& ) = delete;
@@ -50,7 +51,7 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	void ResetGameAssets();
+	void SpawnGameAssets();
 	void DrawGameOver( int x,int y );
 	void DrawTitleScreen( int x,int y );
 	/********************************/
@@ -66,9 +67,9 @@ private:
 	std::uniform_real_distribution<float> yDist;
 	std::uniform_real_distribution<float> pooVDist;
 	std::vector<Poo> poo;
-	Dude dude;
+	Dude* dude = nullptr;
 	Pellet pellet;
-	ScoreBoard sb;
+	ScoreBoard sBoard;
 	GameState gState;
 	Sound pooSound;
 	Sound gameLoop;

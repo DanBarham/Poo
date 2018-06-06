@@ -21,6 +21,12 @@
 #include "MainWindow.h"
 #include "Game.h"
 
+Game::~Game()
+{
+	delete dude;
+	dude = nullptr;
+}
+
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
@@ -36,20 +42,7 @@ Game::Game( MainWindow& wnd )
 	chime( L"Sound\\chime.wav" ),
 	score( 0 )
 {
-	const int numPoo = 20;
-	poo.reserve( numPoo );
-
-	for( int i = 0; i < numPoo; ++i )
-	{
-		Vec2 vel;
-		do
-		{
-			vel.x = pooVDist( rng );
-			vel.y = pooVDist( rng );
-		} while ( abs( vel.x ) < 0.5f || abs( vel.y ) < 0.5f );
-
-		poo.emplace_back( Vec2( xDist( rng ),yDist( rng ) ),vel );
-	}	
+	SpawnGameAssets();
 }
 
 void Game::Go()
@@ -80,8 +73,8 @@ void Game::UpdateModel()
 		}
 		break;
 	case GameState::Playing:
-		dude.Update( wnd.kbd );
-		dude.ClampToScreen();
+		dude->Update( wnd.kbd );
+		dude->ClampToScreen();
 
 		if ( pellet.IsEaten() )
 		{
@@ -89,16 +82,16 @@ void Game::UpdateModel()
 			{
 				++score;
 			}
-			pellet.Respawn( Vec2( xDist( rng ), yDist( rng ) ) );
+			pellet.Respawn( Vec2( xDist( rng ),yDist( rng ) ) );
 			chime.Play();
 		}
 
-		pellet.ProcessConsumption( dude );
+		pellet.ProcessConsumption( *dude );
 
 		for( Poo& p : poo )
 		{
 			p.Update();
-			p.TestCollision( dude );
+			p.TestCollision( *dude );
 			if( p.IsEaten() )
 			{
 				gameLoop.StopAll();
@@ -117,7 +110,7 @@ void Game::UpdateModel()
 				if( e.GetCode() == VK_RETURN )
 				{
 					gState = GameState::TitleScreen;
-					ResetGameAssets();
+					SpawnGameAssets();
 				}
 			}
 		}
@@ -133,7 +126,7 @@ void Game::ComposeFrame()
 	}
 	else
 	{
-		sb.Draw(score, gfx);
+		sBoard.Draw(score, gfx);
 		//Draw da poos
 		for( const Poo& p : poo )
 		{
@@ -141,7 +134,7 @@ void Game::ComposeFrame()
 		}
 
 		//Draw da dude
-		dude.Draw(gfx);
+		dude->Draw(gfx);
 		pellet.Draw(gfx);
 
 		//wompwomp
@@ -152,10 +145,16 @@ void Game::ComposeFrame()
 	}
 }
 
-void Game::ResetGameAssets()
+void Game::SpawnGameAssets()
 {
-	dude.Reset();
-	for( Poo& p : poo )
+	delete dude;
+	dude = new Dude();
+
+	const int numPoo = 20;
+	poo.clear();
+	poo.reserve( numPoo );
+
+	for( int i = 0; i < numPoo; ++i )
 	{
 		Vec2 vel;
 		do
@@ -164,7 +163,7 @@ void Game::ResetGameAssets()
 			vel.y = pooVDist( rng );
 		} while ( abs( vel.x ) < 0.5f || abs( vel.y ) < 0.5f );
 
-		p.Reset( Vec2( xDist( rng ),yDist( rng ) ),vel );
+		poo.emplace_back( Vec2( xDist( rng ),yDist( rng ) ),vel );
 	}
 	score = 0;
 	gState = GameState::TitleScreen;
