@@ -19,6 +19,9 @@
     <Filter Include="Sound">
       <UniqueIdentifier>{3ab4f8b2-275b-42a3-8bdd-e56606effa42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Images">
+      <UniqueIdentifier>{edde6599-f6f2-48e2-9da9-68177a6384f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChiliWin.h">
@@ -72,6 +75,15 @@
     <ClInclude Include="Vec2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vei2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RectI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXErr.cpp">
@@ -113,6 +125,15 @@
     <ClCompile Include="Vec2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Vei2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RectI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="FramebufferPS.hlsl">
@@ -130,6 +151,18 @@
   <ItemGroup>
     <Image Include="Chili.ico">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Images\awsom.bmp">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="Images\dapoopoo.bmp">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="Images\game_over.bmp">
+      <Filter>Images</Filter>
+    </Image>
+    <Image Include="Images\poo.bmp">
+      <Filter>Images</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

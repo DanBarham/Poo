@@ -30,6 +30,7 @@
 #include "Pellet.h"
 #include "ScoreBoard.h"
 #include "SoundEffect.h"
+#include "Surface.h"
 
 class Game
 {
@@ -68,6 +69,10 @@ private:
 	std::uniform_real_distribution<float> yDist;
 	std::uniform_real_distribution<float> pooVDist;
 	std::vector<Poo> poo;
+	Surface dudeSprite;
+	Surface titleSprite;
+	Surface pooSprite;
+	Surface gameOverSprite;
 	Dude* dude = nullptr;
 	Pellet pellet;
 	ScoreBoard sBoard;

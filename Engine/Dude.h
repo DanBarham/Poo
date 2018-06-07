@@ -7,7 +7,7 @@
 class Dude
 {
 public:
-	Dude( const Vec2& _pos = { 400.0f,300.0f } );
+	Dude( Surface& _dudeSprite,const Vec2& _pos = { 400.0f,300.0f } );
 	void ClampToScreen();
 	void Draw( Graphics& gfx ) const;
 	void Update( const Keyboard& kbd );
@@ -17,6 +17,7 @@ public:
 	float GetHeight() const;
 	void Reset();
 private:
+	Surface& dudeSprite;
 	Vec2 pos;
 	static constexpr float speed = 2.0f;
 	static constexpr float width = 20.0f;		//Dimensions of the sprite

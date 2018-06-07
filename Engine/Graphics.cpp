@@ -252,6 +252,11 @@ Graphics::~Graphics()
 	if( pImmediateContext ) pImmediateContext->ClearState();
 }
 
+RectI Graphics::GetScreenRect()
+{
+	return RectI( 0,ScreenWidth,0,ScreenHeight );
+}
+
 void Graphics::EndFrame()
 {
 	HRESULT hr;
@@ -314,6 +319,89 @@ void Graphics::PutPixel( int x,int y,Color c )
 	assert( y >= 0 );
 	assert( y < int( Graphics::ScreenHeight ) );
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
+}
+
+void Graphics::DrawSpriteNonChroma( int x,int y,const Surface& s )
+{
+	DrawSpriteNonChroma( x,y,s.GetRect(),s );
+}
+
+void Graphics::DrawSpriteNonChroma( int x,int y,const RectI& rect,const Surface & s )
+{
+	DrawSpriteNonChroma( x,y,rect,GetScreenRect(),s );
+}
+
+void Graphics::DrawSpriteNonChroma( int x,int y,RectI rect,const RectI& clip,const Surface & s )
+{
+	assert( rect.left >= 0 );
+	assert( rect.right <= s.GetWidth() );
+	assert( rect.top >= 0 );
+	assert( rect.bottom <= s.GetHeight() );
+
+	if( x < clip.left )
+	{
+		rect.left += clip.left - x;
+		x = clip.left;
+	}
+	if( y < clip.top )
+	{
+		rect.top += clip.top - y;
+		y = clip.top;
+	}
+	if( x + rect.GetWidth() > clip.right )
+	{
+		rect.right -= x + rect.GetWidth() - clip.right;
+	}
+	if( y + rect.GetHeight() > clip.bottom )
+	{
+		rect.bottom -= y + rect.GetHeight() - clip.bottom;
+	}
+
+	for( int sy = rect.top; sy < rect.bottom; sy++ )
+	{
+		for( int sx = rect.left; sx < rect.right; sx++ )
+		{
+			PutPixel( x + sx - rect.left,y + sy - rect.top,s.GetPixel( sx,sy ) );
+		}
+	}
+}
+
+void Graphics::DrawSprite( int x,int y,RectI rect,const RectI & clip,const Surface & s,Color chroma )
+{
+	assert( rect.left >= 0 );
+	assert( rect.right <= s.GetWidth() );
+	assert( rect.top >= 0 );
+	assert( rect.bottom <= s.GetHeight() );
+
+	if( x < clip.left )
+	{
+		rect.left += clip.left - x;
+		x = clip.left;
+	}
+	if( y < clip.top )
+	{
+		rect.top += clip.top - y;
+		y = clip.top;
+	}
+	if( x + rect.GetWidth() > clip.right )
+	{
+		rect.right -= x + rect.GetWidth() - clip.right;
+	}
+	if( y + rect.GetHeight() > clip.bottom )
+	{
+		rect.bottom -= y + rect.GetHeight() - clip.bottom;
+	}
+
+	for( int sy = rect.top; sy < rect.bottom; sy++ )
+	{
+		for( int sx = rect.left; sx < rect.right; sx++ )
+		{
+			if( s.GetPixel( sx,sy ) != chroma )
+			{
+				PutPixel(x + sx - rect.left, y + sy - rect.top, s.GetPixel(sx, sy));
+			}
+		}
+	}
 }
 
 
