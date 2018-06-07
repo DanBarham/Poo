@@ -153,18 +153,10 @@ void Game::SpawnGameAssets()
 
 	const int numPoo = 10;
 	poo.clear();
-	poo.reserve( numPoo );
 
 	for( int i = 0; i < numPoo; ++i )
 	{
-		Vec2 vel;
-		do
-		{
-			vel.x = pooVDist( rng );
-			vel.y = pooVDist( rng );
-		} while ( abs( vel.x ) < 0.5f || abs( vel.y ) < 0.5f );
-
-		poo.emplace_back( Vec2( xDist( rng ),yDist( rng ) ),vel );
+		SpawnPoo();
 	}
 	score = 0;
 	gState = GameState::TitleScreen;
@@ -173,13 +165,21 @@ void Game::SpawnGameAssets()
 void Game::SpawnPoo()
 {
 	Vec2 vel;
+	Vec2 pos;
+	const Vec2 dudePos = Vec2( dude->GetX(),dude->GetY() );
+	const float minDistanceSq = 20000.0f;
+	float distanceSq;
+
 	do
 	{
 		vel.x = pooVDist( rng );
 		vel.y = pooVDist( rng );
-	} while ( abs( vel.x ) < 0.5f || abs( vel.y ) < 0.5f );
+		pos.x = xDist( rng );
+		pos.y = yDist( rng );
+		distanceSq = (dudePos - pos).GetLengthSq();
+	} while ( abs( vel.x ) < 0.5f || abs( vel.y ) < 0.5f || distanceSq < minDistanceSq );
 
-	poo.emplace_back( Vec2( xDist( rng ),yDist( rng ) ),vel );
+	poo.emplace_back( pos,vel );
 }
 
 void Game::DrawTitleScreen(int x, int y)

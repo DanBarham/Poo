@@ -7,5 +7,5 @@ class ScoreBoard
 public:
 	void Draw( int score,Graphics& gfx ) const;
 private:
-	static constexpr int height = 30;
+	static constexpr int height = 25;
 };
