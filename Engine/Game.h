@@ -52,6 +52,7 @@ private:
 	/********************************/
 	/*  User Functions              */
 	void SpawnGameAssets();
+	void SpawnPoo();
 	void DrawGameOver( int x,int y );
 	void DrawTitleScreen( int x,int y );
 	/********************************/

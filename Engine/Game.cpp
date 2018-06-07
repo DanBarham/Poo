@@ -83,6 +83,7 @@ void Game::UpdateModel()
 				++score;
 			}
 			pellet.Respawn( Vec2( xDist( rng ),yDist( rng ) ) );
+			SpawnPoo();
 			chime.Play();
 		}
 
@@ -150,7 +151,7 @@ void Game::SpawnGameAssets()
 	delete dude;
 	dude = new Dude();
 
-	const int numPoo = 20;
+	const int numPoo = 10;
 	poo.clear();
 	poo.reserve( numPoo );
 
@@ -167,6 +168,18 @@ void Game::SpawnGameAssets()
 	}
 	score = 0;
 	gState = GameState::TitleScreen;
+}
+
+void Game::SpawnPoo()
+{
+	Vec2 vel;
+	do
+	{
+		vel.x = pooVDist( rng );
+		vel.y = pooVDist( rng );
+	} while ( abs( vel.x ) < 0.5f || abs( vel.y ) < 0.5f );
+
+	poo.emplace_back( Vec2( xDist( rng ),yDist( rng ) ),vel );
 }
 
 void Game::DrawTitleScreen(int x, int y)
